@@ -6,6 +6,8 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.x = 0;
+    this.y = 0;
 }
 
 // Update the enemy's position, required method for game
@@ -21,11 +23,37 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+var Player = function() {
+    this.sprite = 'images/char-boy.png';
+    this.x = 50.5;
+    this.y = 50.5;
+}
+
+Player.prototype.update = function(dt) {
+}
+
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(movementKey) {
+    console.log("Current position is ("+this.x+","+this.y+")");
+    if(movementKey === 'left' && this.x >= 100){
+        this.x -= 100;
+    }else if(movementKey === 'right' && this.x <= 300) {
+        this.x += 100;
+    }else if(movementKey === 'up' && this.y >= 100){
+        this.y -= 100;
+    }else if(movementKey ===  'down' && this.y <= 300){
+        this.y += 100;
+    }
+}
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 
-
+var allEnemies = [];
+var player = new Player();
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
