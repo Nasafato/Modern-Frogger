@@ -6,7 +6,7 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = 0;
+    this.x = -100;
     this.y = 136;
 }
 
@@ -14,6 +14,8 @@ var Enemy = function() {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     this.x += 50*dt;
+
+    
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -31,6 +33,14 @@ var Player = function() {
 }
 
 Player.prototype.update = function(dt) {
+    for(var i = 0; i < allEnemies.length; i++){
+        xDistanceBetween = Math.abs(allEnemies[i].x - this.x);
+        yDistanceBetween = Math.abs(allEnemies[i].y - this.y);
+        if(xDistanceBetween <= 50 && yDistanceBetween === 0){
+            this.x = 202;
+            this.y = 392.5;
+        }
+    }
 }
 
 Player.prototype.render = function() {
