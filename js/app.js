@@ -7,12 +7,13 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
-    this.y = 0;
+    this.y = 136;
 }
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    this.x += 50*dt;
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -25,8 +26,8 @@ Enemy.prototype.render = function() {
 
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-    this.x = 50.5;
-    this.y = 50.5;
+    this.x = 202;
+    this.y = 392.5;
 }
 
 Player.prototype.update = function(dt) {
@@ -38,21 +39,24 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(movementKey) {
     console.log("Current position is ("+this.x+","+this.y+")");
-    if(movementKey === 'left' && this.x >= 100){
-        this.x -= 100;
-    }else if(movementKey === 'right' && this.x <= 300) {
-        this.x += 100;
+    if(movementKey === 'left' && this.x >= 101){
+        this.x -= 101;
+    }else if(movementKey === 'right' && this.x <= 303){
+        this.x += 101;
     }else if(movementKey === 'up' && this.y >= 100){
-        this.y -= 100;
-    }else if(movementKey ===  'down' && this.y <= 300){
-        this.y += 100;
+        this.y -= 171/2;
+    }else if(movementKey ===  'down' && this.y <= 307){
+        this.y += 171/2;
     }
+    console.log("New position is ("+this.x+","+this.y+")");
+
 }
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 
 var allEnemies = [];
+allEnemies.push(new Enemy());
 var player = new Player();
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
