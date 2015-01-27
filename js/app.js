@@ -1,15 +1,3 @@
-var canvasWidth = 0;
-var canvasHeight = 0;
-var gameWidth;
-var gameHeight;
-
-function getGameWidth(width, height) {
-    gameWidth = width;
-    gameHeight = height;
-    canvasWidth = gameWidth * 101;
-    canvasHeight = gameHeight * 101;
-}
-
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -18,14 +6,14 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = -100;
-    this.y = 136;
+    this.x = -1;
+    this.y = .75;
 }
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    this.x += 50*dt;
+    this.x += .5*dt;
 
     
     // You should multiply any movement by the dt parameter
@@ -35,42 +23,42 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
 }
 
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-    this.x = 202;
-    this.y = 392.5;
+    this.x = 2;
+    this.y = 3.75;
 }
 
 Player.prototype.update = function(dt) {
     for(var i = 0; i < allEnemies.length; i++){
         xDistanceBetween = Math.abs(allEnemies[i].x - this.x);
         yDistanceBetween = Math.abs(allEnemies[i].y - this.y);
-        if(xDistanceBetween <= 50 && yDistanceBetween === 0){
-            this.x = 202;
-            this.y = 392.5;
+        if(xDistanceBetween <= .5 && yDistanceBetween === 0){
+            this.x = 2;
+            this.y = 3.75;
         }
     }
 }
 
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
 }
 
 Player.prototype.handleInput = function(movementKey) {
-    console.log("Current position is ("+this.x+","+this.y+")");
-    if(movementKey === 'left' && this.x >= 101){
-        this.x -= 101;
-    }else if(movementKey === 'right' && this.x <= 303){
-        this.x += 101;
-    }else if(movementKey === 'up' && this.y >= 100){
-        this.y -= 171/2;
-    }else if(movementKey ===  'down' && this.y <= 307){
-        this.y += 171/2;
+    console.log("Current position is ("+this.x*101+","+this.y*83+")");
+    if(movementKey === 'left' && this.x >= 1){
+        this.x -= 1;
+    }else if(movementKey === 'right' && this.x <= gameSizeHolder.numCols - 2){
+        this.x += 1;
+    }else if(movementKey === 'up' && this.y >= gameSizeHolder.waterRows){
+        this.y -= 1;
+    }else if(movementKey ===  'down' && this.y <= gameSizeHolder.numRows - 2){
+        this.y += 1;
     }
-    console.log("New position is ("+this.x+","+this.y+")");
+    console.log("New position is ("+this.x*101+","+this.y*83+")");
 
 }
 // Now write your own player class
@@ -79,6 +67,9 @@ Player.prototype.handleInput = function(movementKey) {
 
 var allEnemies = [];
 allEnemies.push(new Enemy());
+
+
+
 var player = new Player();
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies

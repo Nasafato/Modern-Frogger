@@ -28,7 +28,8 @@ var Engine = (function(global) {
 
     gameSizeHolder.numCols = 5;
     gameSizeHolder.numRows = 6;
-    gameSizeHolder.waterRows = 2;
+    gameSizeHolder.waterRows = 1;
+    gameSizeHolder.grassRows = 2;
 
     canvas.width = gameSizeHolder.numCols * 101;
     canvas.height = gameSizeHolder.numRows * 101;
@@ -186,4 +187,5 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+    global.gameSizeHolder = gameSizeHolder;
 })(this);
