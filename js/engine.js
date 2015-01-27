@@ -23,10 +23,15 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        gameSizeHolder = {};
 
-    canvas.width = 505;
-    canvas.height = 606;
+    gameSizeHolder.numCols = 5;
+    gameSizeHolder.numRows = 6;
+    gameSizeHolder.waterRows = 2;
+
+    canvas.width = gameSizeHolder.numCols * 101;
+    canvas.height = gameSizeHolder.numRows * 101;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -115,8 +120,8 @@ var Engine = (function(global) {
                 'images/grass-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
-            numRows = 6,
-            numCols = 5,
+            numRows = gameSizeHolder.numRows,
+            numCols = gameSizeHolder.numCols,
             row, col;
 
         /* Loop through the number of rows and columns we've defined above

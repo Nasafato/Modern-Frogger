@@ -1,3 +1,15 @@
+var canvasWidth = 0;
+var canvasHeight = 0;
+var gameWidth;
+var gameHeight;
+
+function getGameWidth(width, height) {
+    gameWidth = width;
+    gameHeight = height;
+    canvasWidth = gameWidth * 101;
+    canvasHeight = gameHeight * 101;
+}
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
