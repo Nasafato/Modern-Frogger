@@ -1,27 +1,21 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+var Enemy = function(row, speed) {
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -1;
-    this.y = .75;
+    this.y = -.25 + row;
+    this.speed = speed;
+
 }
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    this.x += .5*dt;
-
-    
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    this.x += this.speed*dt;
+    if(this.x > 5){
+        var index = gameEntities.allEnemies.indexOf(this);
+        gameEntities.allEnemies.splice(index, 1);
+        gameEntities.generateEnemies();
+    }
 }
 
-// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
 }
@@ -33,10 +27,10 @@ var Player = function() {
 }
 
 Player.prototype.update = function(dt) {
-    for(var i = 0; i < allEnemies.length; i++){
-        xDistanceBetween = Math.abs(allEnemies[i].x - this.x);
-        yDistanceBetween = Math.abs(allEnemies[i].y - this.y);
-        if(xDistanceBetween <= .5 && yDistanceBetween === 0){
+    for(var i = 0; i < gameEntities.allEnemies.length; i++){
+        xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - this.x);
+        yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - this.y);
+        if(xDistanceBetween <= .55 && yDistanceBetween === 0){
             this.x = 2;
             this.y = 3.75;
         }
@@ -48,7 +42,6 @@ Player.prototype.render = function() {
 }
 
 Player.prototype.handleInput = function(movementKey) {
-    console.log("Current position is ("+this.x*101+","+this.y*83+")");
     if(movementKey === 'left' && this.x >= 1){
         this.x -= 1;
     }else if(movementKey === 'right' && this.x <= gameSizeHolder.numCols - 2){
@@ -58,24 +51,35 @@ Player.prototype.handleInput = function(movementKey) {
     }else if(movementKey ===  'down' && this.y <= gameSizeHolder.numRows - 2){
         this.y += 1;
     }
-    console.log("New position is ("+this.x*101+","+this.y*83+")");
-
 }
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 
-var allEnemies = [];
-allEnemies.push(new Enemy());
+var gameEntities = {
+    player: {},
+    allEnemies: [],
+    candidateRows: [],
+    initializeEntities: function(){
+        this.getPossibleRows();
+        this.player = new Player();
+        this.generateEnemies();
+    },
+    getPossibleRows: function(){
+        var numRows = gameSizeHolder.numRows;
+        var grassRows = gameSizeHolder.grassRows;
+        var waterRows = gameSizeHolder.waterRows;
+        for(var i = waterRows; i < (numRows - grassRows); i++){
+            this.candidateRows.push(i);
+        }
+    },
+    generateEnemies: function(){
+        while(this.allEnemies.length < 3){
+            var randomRow = this.candidateRows[Math.floor(Math.random()*this.candidateRows.length)];
+            var randomSpeed = Math.random() + .3
+            this.allEnemies.push(new Enemy(randomRow, randomSpeed));    
+        }
 
 
-
-var player = new Player();
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-
+    }
+};
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -87,5 +91,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    gameEntities.player.handleInput(allowedKeys[e.keyCode]);
 });
