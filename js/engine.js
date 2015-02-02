@@ -30,6 +30,7 @@ var Engine = (function(global) {
     gameSizeHolder.numRows = 6;
     gameSizeHolder.waterRows = 1;
     gameSizeHolder.grassRows = 2;
+    gameSizeHolder.enemyRows = gameSizeHolder.numRows - gameSizeHolder.waterRows - gameSizeHolder.grassRows;
 
     canvas.width = gameSizeHolder.numCols * 101;
     canvas.height = gameSizeHolder.numRows * 101;

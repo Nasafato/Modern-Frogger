@@ -1,15 +1,22 @@
-var Enemy = function(row, speed) {
+var Enemy = function(row, speed, spawnsRightSide) {
 
     this.sprite = 'images/enemy-bug.png';
-    this.x = -1;
+    if(spawnsRightSide){
+        this.x = gameSizeHolder.numCols;
+        this.speed = -speed;
+    }
+    else{
+        this.x = -1
+        this.speed = speed;
+    }
+
     this.y = -.25 + row;
-    this.speed = speed;
 
 }
 
 Enemy.prototype.update = function(dt) {
     this.x += this.speed*dt;
-    if(this.x > 5){
+    if(this.x > gameSizeHolder.numCols || this.x < -1){
         var index = gameEntities.allEnemies.indexOf(this);
         gameEntities.allEnemies.splice(index, 1);
         gameEntities.generateEnemies();
@@ -71,10 +78,16 @@ var gameEntities = {
         }
     },
     generateEnemies: function(){
-        while(this.allEnemies.length < 3){
+        while(this.allEnemies.length < gameSizeHolder.enemyRows){
             var randomRow = this.candidateRows[Math.floor(Math.random()*this.candidateRows.length)];
             var randomSpeed = Math.random() + .3
-            this.allEnemies.push(new Enemy(randomRow, randomSpeed));    
+            var randomSeed = Math.random();
+            var randomSpawnSide;
+            if (randomSeed < .5)
+                randomSpawnSide = true;
+            else
+                randomSpawnSide = false;
+            this.allEnemies.push(new Enemy(randomRow, randomSpeed, randomSpawnSide));    
         }
 
 
