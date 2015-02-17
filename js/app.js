@@ -1,7 +1,13 @@
+/*
+ * Enemies are given a random row, speed, and each has 50/50 chance of spawning on
+ * left or right side
+ */
 var Enemy = function(row, speed, spawnsRightSide) {
 
-    this.sprite = 'images/enemy-bug.png';
-    if(spawnsRightSide){
+    this.rightFacingSprite = 'images/enemy-bug-rightfacing.png';
+    this.leftFacingSprite = 'images/enemy-bug-leftfacing.png';
+    this.spawnsRightSide = spawnsRightSide;
+    if(this.spawnsRightSide){
         this.x = gameSizeHolder.numCols;
         this.speed = -speed;
     }
@@ -14,6 +20,10 @@ var Enemy = function(row, speed, spawnsRightSide) {
 
 }
 
+/*
+ * If the enemy object moves beyond the left or right boundaries of the game map, the
+ * function removes the object from the list of enemies and creates a new enemy
+ */
 Enemy.prototype.update = function(dt) {
     this.x += this.speed*dt;
     if(this.x > gameSizeHolder.numCols || this.x < -1){
@@ -23,8 +33,16 @@ Enemy.prototype.update = function(dt) {
     }
 }
 
+/*
+ * Depending on the enemy's spawnsRightSide field, this will render the enemy using
+ * the left facing sprite or the right facing sprite
+ */
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
+    if (this.spawnsRightSide) {
+        ctx.drawImage(Resources.get(this.leftFacingSprite), this.x * 101, this.y * 83);
+    } else {
+        ctx.drawImage(Resources.get(this.rightFacingSprite), this.x * 101, this.y * 83);
+    }   
 }
 
 var Player = function() {
@@ -33,6 +51,11 @@ var Player = function() {
     this.y = 3.75;
 }
 
+/*
+ * Checks against all enemy objects the distance between the enemy and the player
+ * in terms of the coordinate system - if the distance is small enough, then the 
+ * player is reset to his/her original position
+ */
 Player.prototype.update = function(dt) {
     for(var i = 0; i < gameEntities.allEnemies.length; i++){
         xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - this.x);
@@ -48,6 +71,10 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
 }
 
+/*
+ * Arrow keys shift the player in the desired direction by 1, limited by the 
+ * boundaries of the game map
+ */
 Player.prototype.handleInput = function(movementKey) {
     if(movementKey === 'left' && this.x >= 1){
         this.x -= 1;
@@ -60,19 +87,29 @@ Player.prototype.handleInput = function(movementKey) {
     }
 }
 
+/*
+ * Holds all the enemy and player objects - initialized in engine.js once that file 
+ * loads to get the number of rows of each type (stone, grass, water) in order to
+ * spawn the correct number of enemies in the correct rows
+ */
 var gameEntities = {
     player: {},
     allEnemies: [],
-    candidateRows: [],
+    candidateRows: [], /* holds integers that represent the row numbers of the possible rows for enemies to spawn in */
     initializeEntities: function(){
-        this.getPossibleRows();
+        this.getPossibleRows(); /* gets the candidate rows */
         this.player = new Player();
         this.generateEnemies();
     },
     getPossibleRows: function(){
-        var numRows = gameSizeHolder.numRows;
+        var numRows = gameSizeHolder.numRows; /* total number of rows */
         var grassRows = gameSizeHolder.grassRows;
         var waterRows = gameSizeHolder.waterRows;
+
+        /* coordinates are measured from the top left corner, as per HTML Canvas,
+         * so we start at the number of the water rows and push the numbers between
+         * the last water row and the last stone row
+         */
         for(var i = waterRows; i < (numRows - grassRows); i++){
             this.candidateRows.push(i);
         }
