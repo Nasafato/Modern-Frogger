@@ -77,6 +77,22 @@ var Engine = (function(global) {
         main();
     }
 
+    function checkCollisions() {
+        var player_x = gameEntities.player.x;
+        var player_y = gameEntities.player.y;
+        for(var i = 0; i < gameEntities.allEnemies.length; i++){
+            xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - player_x);
+            yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - player_y);
+            if(xDistanceBetween <= .55 && yDistanceBetween === 0){
+                reset()
+                gameEntities.player.x = 2;
+                gameEntities.player.y = 3.75;
+            }
+
+        }
+    }
+
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -88,7 +104,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -168,7 +184,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        console.log("Reset");
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -191,4 +207,5 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
     global.gameSizeHolder = gameSizeHolder;
+    global.reset = reset();
 })(this);

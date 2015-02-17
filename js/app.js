@@ -8,8 +8,8 @@ var Enemy = function(row, speed, spawnsRightSide) {
     this.leftFacingSprite = 'images/enemy-bug-leftfacing.png';
     this.spawnsRightSide = spawnsRightSide;
     if(this.spawnsRightSide){
-        this.x = gameSizeHolder.numCols;
-        this.speed = -speed;
+        this.x = gameSizeHolder.numCols; // places enemy at right side of map
+        this.speed = -speed;             // reverses enemy movement
     }
     else{
         this.x = -1
@@ -22,7 +22,7 @@ var Enemy = function(row, speed, spawnsRightSide) {
 
 /*
  * If the enemy object moves beyond the left or right boundaries of the game map, the
- * function removes the object from the list of enemies and creates a new enemy
+ * function removes this enemy from the list of enemies and creates a new enemy
  */
 Enemy.prototype.update = function(dt) {
     this.x += this.speed*dt;
@@ -57,14 +57,6 @@ var Player = function() {
  * player is reset to his/her original position
  */
 Player.prototype.update = function(dt) {
-    for(var i = 0; i < gameEntities.allEnemies.length; i++){
-        xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - this.x);
-        yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - this.y);
-        if(xDistanceBetween <= .55 && yDistanceBetween === 0){
-            this.x = 2;
-            this.y = 3.75;
-        }
-    }
 }
 
 Player.prototype.render = function() {
