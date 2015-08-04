@@ -64,7 +64,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
-    };
+    }
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
@@ -77,6 +77,10 @@ var Engine = (function(global) {
         main();
     }
 
+    function renderGameOver() {
+        reset();
+    }
+
     function checkCollisions() {
         var player_x = gameEntities.player.x;
         var player_y = gameEntities.player.y;
@@ -84,7 +88,7 @@ var Engine = (function(global) {
             xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - player_x);
             yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - player_y);
             if(xDistanceBetween <= .55 && yDistanceBetween === 0){
-                reset()
+                renderGameOver();
                 gameEntities.player.x = 2;
                 gameEntities.player.y = 3.75;
             }

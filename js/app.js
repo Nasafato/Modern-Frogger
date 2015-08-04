@@ -10,15 +10,14 @@ var Enemy = function(row, speed, spawnsRightSide) {
     if(this.spawnsRightSide){
         this.x = gameSizeHolder.numCols; // places enemy at right side of map
         this.speed = -speed;             // reverses enemy movement
-    }
-    else{
+    } else {
         this.x = -1
         this.speed = speed;
     }
 
     this.y = -.25 + row;
 
-}
+};
 
 /*
  * If the enemy object moves beyond the left or right boundaries of the game map, the
@@ -31,7 +30,7 @@ Enemy.prototype.update = function(dt) {
         gameEntities.allEnemies.splice(index, 1);
         gameEntities.generateEnemies();
     }
-}
+};
 
 /*
  * Depending on the enemy's spawnsRightSide field, this will render the enemy using
@@ -43,13 +42,13 @@ Enemy.prototype.render = function() {
     } else {
         ctx.drawImage(Resources.get(this.rightFacingSprite), this.x * 101, this.y * 83);
     }   
-}
+};
 
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 2;
     this.y = 3.75;
-}
+};
 
 /*
  * Checks against all enemy objects the distance between the enemy and the player
@@ -57,11 +56,11 @@ var Player = function() {
  * player is reset to his/her original position
  */
 Player.prototype.update = function(dt) {
-}
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
-}
+};
 
 /*
  * Arrow keys shift the player in the desired direction by 1, limited by the 
@@ -77,7 +76,7 @@ Player.prototype.handleInput = function(movementKey) {
     }else if(movementKey ===  'down' && this.y <= gameSizeHolder.numRows - 2){
         this.y += 1;
     }
-}
+};
 
 /*
  * Holds all the enemy and player objects - initialized in engine.js once that file 
@@ -98,7 +97,8 @@ var gameEntities = {
         var grassRows = gameSizeHolder.grassRows;
         var waterRows = gameSizeHolder.waterRows;
 
-        /* coordinates are measured from the top left corner, as per HTML Canvas,
+        /* 
+         * coordinates are measured from the top left corner, as per HTML Canvas,
          * so we start at the number of the water rows and push the numbers between
          * the last water row and the last stone row
          */
@@ -106,6 +106,7 @@ var gameEntities = {
             this.candidateRows.push(i);
         }
     },
+    /* Generates an enemy on a random row, side, and at a random speed */
     generateEnemies: function(){
         while(this.allEnemies.length < gameSizeHolder.enemyRows){
             var randomRow = this.candidateRows[Math.floor(Math.random()*this.candidateRows.length)];
