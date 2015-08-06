@@ -27,10 +27,12 @@ var Engine = (function(global) {
         gameSizeHolder = {};
 
     gameSizeHolder.numCols = 5;
-    gameSizeHolder.numRows = 6;
-    gameSizeHolder.waterRows = 1;
+    gameSizeHolder.numRows = 8;
+    gameSizeHolder.waterRows = 2;
     gameSizeHolder.grassRows = 2;
     gameSizeHolder.enemyRows = gameSizeHolder.numRows - gameSizeHolder.waterRows - gameSizeHolder.grassRows;
+    gameSizeHolder.playerSpawn_x = Math.floor(gameSizeHolder.numCols/2);
+    gameSizeHolder.playerSpawn_y = gameSizeHolder.numRows - 1.25;
 
     canvas.width = gameSizeHolder.numCols * 101;
     canvas.height = gameSizeHolder.numRows * 101;
@@ -81,6 +83,11 @@ var Engine = (function(global) {
         reset();
     }
 
+    function checkPlayerPosition() {
+        checkCollisions() 
+        checkReachedWater()
+    }
+
     function checkCollisions() {
         var player_x = gameEntities.player.x;
         var player_y = gameEntities.player.y;
@@ -89,11 +96,20 @@ var Engine = (function(global) {
             yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - player_y);
             if(xDistanceBetween <= .55 && yDistanceBetween === 0){
                 renderGameOver();
-                gameEntities.player.x = 2;
-                gameEntities.player.y = 3.75;
+                gameEntities.player.x = gameSizeHolder.playerSpawn_x;
+                gameEntities.player.y = gameSizeHolder.playerSpawn_y;
             }
 
         }
+    }
+
+    function checkReachedWater() {
+        var player_y = gameEntities.player.y
+        if (player_y < gameSizeHolder.waterRows - .25) {
+            var confirm = window.alert("You won! Press 'OK' to play again.")
+            renderGameOver()
+        }
+
     }
 
 
@@ -108,7 +124,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkCollisions();
+        checkPlayerPosition();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -135,6 +151,17 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        var rowImages = []
+        for (var i = 0; i < gameSizeHolder.waterRows; i++) {
+            rowImages.push('images/water-block.png')
+        }
+        for (var i = 0; i < gameSizeHolder.enemyRows; i++) {
+            rowImages.push('images/stone-block.png')
+        }
+        for (var i = 0; i < gameSizeHolder.grassRows; i++) {
+            rowImages.push('images/grass-block.png')
+        }
+        /*
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -142,10 +169,12 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // Row 3 of 3 of stone
                 'images/grass-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = gameSizeHolder.numRows,
-            numCols = gameSizeHolder.numCols,
-            row, col;
+            ]
+        */
+        var numRows = gameSizeHolder.numRows
+        var numCols = gameSizeHolder.numCols
+        var row;
+        var col;
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -189,6 +218,8 @@ var Engine = (function(global) {
      */
     function reset() {
         console.log("Reset");
+        gameEntities.player.x = gameSizeHolder.playerSpawn_x;
+        gameEntities.player.y = gameSizeHolder.playerSpawn_y;
     }
 
     /* Go ahead and load all of the images we know we're going to need to

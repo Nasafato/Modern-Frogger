@@ -17,7 +17,7 @@ var Enemy = function(row, speed, spawnsRightSide) {
 
     this.y = -.25 + row;
 
-};
+}
 
 /*
  * If the enemy object moves beyond the left or right boundaries of the game map, the
@@ -30,7 +30,7 @@ Enemy.prototype.update = function(dt) {
         gameEntities.allEnemies.splice(index, 1);
         gameEntities.generateEnemies();
     }
-};
+}
 
 /*
  * Depending on the enemy's spawnsRightSide field, this will render the enemy using
@@ -42,13 +42,13 @@ Enemy.prototype.render = function() {
     } else {
         ctx.drawImage(Resources.get(this.rightFacingSprite), this.x * 101, this.y * 83);
     }   
-};
+}
 
 var Player = function() {
     this.sprite = 'images/char-boy.png';
-    this.x = 2;
-    this.y = 3.75;
-};
+    this.x = gameSizeHolder.playerSpawn_x;
+    this.y = gameSizeHolder.playerSpawn_y;
+}
 
 /*
  * Checks against all enemy objects the distance between the enemy and the player
@@ -56,11 +56,11 @@ var Player = function() {
  * player is reset to his/her original position
  */
 Player.prototype.update = function(dt) {
-};
+}
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
-};
+}
 
 /*
  * Arrow keys shift the player in the desired direction by 1, limited by the 
@@ -71,12 +71,12 @@ Player.prototype.handleInput = function(movementKey) {
         this.x -= 1;
     }else if(movementKey === 'right' && this.x <= gameSizeHolder.numCols - 2){
         this.x += 1;
-    }else if(movementKey === 'up' && this.y >= gameSizeHolder.waterRows){
+    }else if(movementKey === 'up' && this.y >= gameSizeHolder.waterRows - 1){
         this.y -= 1;
     }else if(movementKey ===  'down' && this.y <= gameSizeHolder.numRows - 2){
         this.y += 1;
     }
-};
+}
 
 /*
  * Holds all the enemy and player objects - initialized in engine.js once that file 
