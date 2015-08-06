@@ -30,6 +30,17 @@ Enemy.prototype.update = function(dt) {
         gameEntities.allEnemies.splice(index, 1);
         gameEntities.generateEnemies();
     }
+
+    // Checks if the player has collided with the enemy or not
+    // If so, resets the player position
+    var player_x = gameEntities.player.x;
+    var player_y = gameEntities.player.y;
+    xDistanceBetween = Math.abs(this.x - player_x);
+    yDistanceBetween = Math.abs(this.y - player_y);
+    if(xDistanceBetween <= .55 && yDistanceBetween === 0){
+        gameEntities.player.resetPosition();
+    }
+
 }
 
 /*
@@ -51,16 +62,25 @@ var Player = function() {
 }
 
 /*
- * Checks against all enemy objects the distance between the enemy and the player
- * in terms of the coordinate system - if the distance is small enough, then the 
- * player is reset to his/her original position
+ * Checks if player has reached the water - if so, alert for new game and reset player position
  */
 Player.prototype.update = function(dt) {
+    if (this.y < gameSizeHolder.waterRows - .25) {
+        var confirm = window.alert("You won! Press 'OK' to play again.");
+        this.resetPosition();
+    }
 }
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
 }
+
+Player.prototype.resetPosition = function() {
+    this.x = gameSizeHolder.playerSpawn_x;
+    this.y = gameSizeHolder.playerSpawn_y;
+}
+
+
 
 /*
  * Arrow keys shift the player in the desired direction by 1, limited by the 

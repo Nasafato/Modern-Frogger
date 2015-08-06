@@ -83,35 +83,6 @@ var Engine = (function(global) {
         reset();
     }
 
-    function checkPlayerPosition() {
-        checkCollisions() 
-        checkReachedWater()
-    }
-
-    function checkCollisions() {
-        var player_x = gameEntities.player.x;
-        var player_y = gameEntities.player.y;
-        for(var i = 0; i < gameEntities.allEnemies.length; i++){
-            xDistanceBetween = Math.abs(gameEntities.allEnemies[i].x - player_x);
-            yDistanceBetween = Math.abs(gameEntities.allEnemies[i].y - player_y);
-            if(xDistanceBetween <= .55 && yDistanceBetween === 0){
-                renderGameOver();
-                gameEntities.player.x = gameSizeHolder.playerSpawn_x;
-                gameEntities.player.y = gameSizeHolder.playerSpawn_y;
-            }
-
-        }
-    }
-
-    function checkReachedWater() {
-        var player_y = gameEntities.player.y
-        if (player_y < gameSizeHolder.waterRows - .25) {
-            var confirm = window.alert("You won! Press 'OK' to play again.")
-            renderGameOver()
-        }
-
-    }
-
 
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
@@ -124,7 +95,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        checkPlayerPosition();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -138,7 +108,7 @@ var Engine = (function(global) {
         gameEntities.allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        gameEntities.player.update();
+        gameEntities.player.update(dt);
     }
 
     /* This function initially draws the "game level", it will then call
