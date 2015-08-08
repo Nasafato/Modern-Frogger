@@ -11,13 +11,13 @@ var Enemy = function(row, speed, spawnsRightSide) {
         this.x = gameSizeHolder.numCols; // places enemy at right side of map
         this.speed = -speed;             // reverses enemy movement
     } else {
-        this.x = -1
+        this.x = -1;
         this.speed = speed;
     }
 
-    this.y = -.25 + row;
+    this.y = -0.25 + row;
 
-}
+};
 
 /*
  * If the enemy object moves beyond the left or right boundaries of the game map, the
@@ -35,13 +35,13 @@ Enemy.prototype.update = function(dt) {
     // If so, resets the player position
     var player_x = gameEntities.player.x;
     var player_y = gameEntities.player.y;
-    xDistanceBetween = Math.abs(this.x - player_x);
-    yDistanceBetween = Math.abs(this.y - player_y);
-    if(xDistanceBetween <= .55 && yDistanceBetween === 0){
+    var xDistanceBetween = Math.abs(this.x - player_x);
+    var yDistanceBetween = Math.abs(this.y - player_y);
+    if(xDistanceBetween <= 0.55 && yDistanceBetween === 0){
         gameEntities.player.resetPosition();
     }
 
-}
+};
 
 /*
  * Depending on the enemy's spawnsRightSide field, this will render the enemy using
@@ -52,33 +52,33 @@ Enemy.prototype.render = function() {
         ctx.drawImage(Resources.get(this.leftFacingSprite), this.x * 101, this.y * 83);
     } else {
         ctx.drawImage(Resources.get(this.rightFacingSprite), this.x * 101, this.y * 83);
-    }   
-}
+    }
+};
 
 var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = gameSizeHolder.playerSpawn_x;
     this.y = gameSizeHolder.playerSpawn_y;
-}
+};
 
 /*
  * Checks if player has reached the water - if so, alert for new game and reset player position
  */
-Player.prototype.update = function(dt) {
-    if (this.y < gameSizeHolder.waterRows - .25) {
-        var confirm = window.alert("You won! Press 'OK' to play again.");
+Player.prototype.update = function() {
+    if (this.y < gameSizeHolder.waterRows - 0.25) {
+        window.alert("You won! Press 'OK' to play again.");
         this.resetPosition();
     }
-}
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83);
-}
+};
 
 Player.prototype.resetPosition = function() {
     this.x = gameSizeHolder.playerSpawn_x;
     this.y = gameSizeHolder.playerSpawn_y;
-}
+};
 
 
 
@@ -96,10 +96,10 @@ Player.prototype.handleInput = function(movementKey) {
     }else if(movementKey ===  'down' && this.y <= gameSizeHolder.numRows - 2){
         this.y += 1;
     }
-}
+};
 
 /*
- * Holds all the enemy and player objects - initialized in engine.js once that file 
+ * Holds all the enemy and player objects - initialized in engine.js once that file
  * loads to get the number of rows of each type (stone, grass, water) in order to
  * spawn the correct number of enemies in the correct rows
  */
@@ -116,7 +116,7 @@ var gameEntities = {
         var numRows = gameSizeHolder.numRows; /* total number of rows */
         var grassRows = gameSizeHolder.grassRows;
         var waterRows = gameSizeHolder.waterRows;
-
+        
         /* 
          * coordinates are measured from the top left corner, as per HTML Canvas,
          * so we start at the number of the water rows and push the numbers between
@@ -130,14 +130,14 @@ var gameEntities = {
     generateEnemies: function(){
         while(this.allEnemies.length < gameSizeHolder.enemyRows){
             var randomRow = this.candidateRows[Math.floor(Math.random()*this.candidateRows.length)];
-            var randomSpeed = Math.random() + .3
+            var randomSpeed = Math.random() + 0.5;
             var randomSeed = Math.random();
             var randomSpawnSide;
-            if (randomSeed < .5)
+            if (randomSeed < 0.5)
                 randomSpawnSide = true;
             else
                 randomSpawnSide = false;
-            this.allEnemies.push(new Enemy(randomRow, randomSpeed, randomSpawnSide));    
+            this.allEnemies.push(new Enemy(randomRow, randomSpeed, randomSpawnSide));
         }
 
 
@@ -156,3 +156,5 @@ document.addEventListener('keyup', function(e) {
 
     gameEntities.player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
