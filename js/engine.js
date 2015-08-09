@@ -121,15 +121,16 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        var rowImages = []
-        for (var i = 0; i < gameSizeHolder.waterRows; i++) {
-            rowImages.push('images/water-block.png')
+        var rowImages = [];
+      	var i = 0;
+        for (i = 0; i < gameSizeHolder.waterRows; i++) {
+            rowImages.push('images/water-block.png');
         }
-        for (var i = 0; i < gameSizeHolder.enemyRows; i++) {
-            rowImages.push('images/stone-block.png')
+        for (i = 0; i < gameSizeHolder.enemyRows; i++) {
+            rowImages.push('images/stone-block.png');
         }
-        for (var i = 0; i < gameSizeHolder.grassRows; i++) {
-            rowImages.push('images/grass-block.png')
+        for (i = 0; i < gameSizeHolder.grassRows; i++) {
+            rowImages.push('images/grass-block.png');
         }
         /*
         var rowImages = [
@@ -141,8 +142,8 @@ var Engine = (function(global) {
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ]
         */
-        var numRows = gameSizeHolder.numRows
-        var numCols = gameSizeHolder.numCols
+        var numRows = gameSizeHolder.numRows;
+        var numCols = gameSizeHolder.numCols;
         var row;
         var col;
 
@@ -214,3 +215,5 @@ var Engine = (function(global) {
     global.gameSizeHolder = gameSizeHolder;
     global.reset = reset();
 })(this);
+
+
